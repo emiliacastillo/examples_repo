@@ -27,6 +27,7 @@ import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
+import { RolesModule } from './roles/roles.module';
 import * as ormconfig from './ormconfig';
 
 @Module({
@@ -39,6 +40,7 @@ import * as ormconfig from './ormconfig';
     }),
     UsersModule,
     AuthModule,
+    RolesModule,
   ],
   controllers: [],
   providers: [],

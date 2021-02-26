@@ -1,4 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { getConnection } from 'typeorm';
+import { RoleEntity } from '../roles/roles.entity';
+import { RolesRepository } from '../roles/roles.repository';
 import { UserDTO } from './user.dto';
 import { UserEntity } from './users.entity';
 import { UserMapper } from './users.mapper';
@@ -7,6 +10,7 @@ import { UsersRepository } from './users.repository';
 @Injectable()
 export class UsersService {
   constructor(
+    //private rolesRepository: RolesRepository,
     private usersRepository: UsersRepository,
     private mapper: UserMapper,
   ) {}
@@ -22,6 +26,11 @@ export class UsersService {
   }
 
   async newUser(userDTO: UserDTO): Promise<UserDTO> {
+    //const roles=await this.rolesRepository.getRoleByName('GENERAL');
+   // userDTO.roles=[roles];
+   const repo = getConnection().getRepository(RoleEntity);
+   const defaultrole = await repo.findOne({where: {name: 'ADMIN'}});
+   userDTO.roles=[defaultrole];
     const newUser: UserEntity = await this.usersRepository.newUser(userDTO);
     return this.mapper.entityToDto(newUser);
   }

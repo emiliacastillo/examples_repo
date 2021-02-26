@@ -4,6 +4,7 @@ import { UserDTO } from 'src/users/user.dto';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { UsersModule } from '../src/users/users.module';
+import { v4 as uuidv4 } from 'uuid';
 
 describe('UsersController (e2e)', () => {
   let app: INestApplication;
@@ -24,16 +25,16 @@ describe('UsersController (e2e)', () => {
     const currentSize = currentGetAllRequest.body.length;
 
     const newUser: UserDTO = {
-      id: '14c1a277-9cf3-4489-9a81-5249854b8845',
+      id: uuidv4(),
       name: 'Mateo',
       password: 'lola',
+      status: 'ACTIVE',
     };
     const newUserRequest = await server
       .post('/users')
       .type('form')
       .send(newUser)
       .expect(201);
-    // await server.post('/users').type('form').send(newUser).expect(500);
     expect(newUserRequest.body.name).toBe(newUser.name);
     expect(newUserRequest.body.id).toBe(newUser.id);
 
@@ -49,6 +50,7 @@ describe('UsersController (e2e)', () => {
       id: newUserRequest.body.id,
       name: 'Mateo Aguilera',
       password: 'contra',
+      status: 'ACTIVE',
     };
     const updateUserRequest = await server
       .put(`/users/${updateUser.id}`)

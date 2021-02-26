@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 import { UserDTO } from './user.dto';
@@ -17,7 +17,7 @@ export class UsersRepository {
     return this.usersRepository.find();
   }
 
-  getUserById(id: string): Promise<UserEntity> {
+  getUserById(id: string): Promise<UserEntity> {    
     return this.usersRepository.findOne(id);
   }
 
@@ -26,17 +26,18 @@ export class UsersRepository {
     return this.usersRepository.save(newUser);
   }
 
-  async updateUser(id: string, userDTO: UserDTO): Promise<UserEntity> {
+  async updateUser(id: string, userDTO: UserDTO): Promise<UserEntity> {   
     userDTO.id = id;
     const updateUser = this.mapper.dtoToEntity(userDTO);
     await this.usersRepository.update(id, updateUser);
     return this.usersRepository.findOne(id);
   }
 
-  deleteUser(id: string): Promise<DeleteResult> {
+  deleteUser(id: string): Promise<DeleteResult> {    
     return this.usersRepository.delete(id);
-  }
-  getUserByName(name: string): Promise<UserEntity> {
+  }  
+
+  getUserByName(name: string): Promise<UserEntity> {   
     return this.usersRepository.findOne({ name });
   }
 }
